@@ -89,7 +89,12 @@
     </style>
 </head>
 <body>
-    <div id="countdownPage">
+    <div id="accessDeniedPage">
+        <h1>ยังไม่ถึงเวลาเข้าชมเว็บไซต์</h1>
+        <p>กรุณากลับมาใหม่หลังเที่ยงคืน</p>
+    </div>
+    
+    <div id="countdownPage" class="hidden">
         <h1>Countdown to Surprise 🎉</h1>
         <div id="countdown"></div>
     </div>
@@ -114,6 +119,21 @@
     </div>
     
     <script>
+        function checkAccessTime() {
+            const now = new Date();
+            const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            if (now >= midnight) {
+                document.getElementById("accessDeniedPage").classList.add("hidden");
+                document.getElementById("countdownPage").classList.remove("hidden");
+                updateCountdown();
+            } else {
+                document.getElementById("accessDeniedPage").classList.remove("hidden");
+                document.getElementById("countdownPage").classList.add("hidden");
+                document.getElementById("passwordPage").classList.add("hidden");
+                document.getElementById("contentPage").classList.add("hidden");
+            }
+        }
+
         function updateCountdown() {
             const now = new Date();
             const birthday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
@@ -129,7 +149,6 @@
                 setTimeout(updateCountdown, 1000);
             }
         }
-        updateCountdown();
 
         function checkPassword() {
             const password = "102050"; // รหัสผ่านที่กำหนด
@@ -137,18 +156,6 @@
             if (input === password) {
                 document.getElementById("passwordPage").classList.add("hidden");
                 document.getElementById("contentPage").classList.remove("hidden");
-                document.getElementById("birthdayMessage").classList.remove("hidden");
-                startFireworks();
-                createBalloons();
-            } else {
-                document.getElementById("errorMessage").style.display = "block";
-            }
-        }
-
-        function startFireworks() {
-            const canvas = document.querySelector(".fireworks");
-            const ctx = canvas.getContext("2d");
-            canvas.width = window.innerWidth;
-
+                document.getElementById
 ::contentReference[oaicite:0]{index=0}
  
