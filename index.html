@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Happy Birthday Surprise!</title>
     <style>
         body {
             background-color: #ADD8E6;
@@ -14,37 +14,66 @@
             flex-direction: column;
             text-align: center;
             font-family: 'Arial', sans-serif;
+            overflow: hidden;
         }
-        h1 {
-            font-size: 3rem;
-            color: #fff;
-            text-shadow: 2px 2px 4px #000;
+        input {
+            padding: 10px;
+            font-size: 1rem;
+            margin-top: 10px;
         }
-        #message {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-top: 20px;
-        }
-        #countdown {
-            font-size: 2rem;
-            color: #fff;
-            margin-top: 20px;
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin-top: 10px;
+            cursor: pointer;
         }
         .hidden {
             display: none;
         }
+        .fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 70px;
+            background-color: red;
+            border-radius: 50%;
+            animation: float 5s ease-in infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <div id="countdown"></div>
-    <div id="birthdayMessage" class="hidden">
-        <h1>Happy Birthday My Love! 🎉</h1>
-        <p id="message">ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยความสุข รักเธอนะ 💙</p>
-        
-        <audio autoplay loop>
-            <source src="happy_birthday.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+    <div id="countdownPage">
+        <h1>Countdown to Surprise 🎉</h1>
+        <div id="countdown" style="font-size: 2rem; font-weight: bold; animation: blink 1s infinite alternate; color: red;"></div>
+    </div>
+    
+    <div id="passwordPage" class="hidden">
+        <h1>Enter Password</h1>
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="errorMessage" style="color: red; display: none;">Incorrect password. Try again.</p>
+    </div>
+    
+    <div id="contentPage" class="hidden">
+        <canvas class="fireworks"></canvas>
+        <div id="birthdayMessage" class="hidden">
+            <h1 style="font-size: 3rem; color: gold; text-shadow: 3px 3px 10px black;">🎂 Happy Birthday My Love! 🎂</h1>
+            <p id="message" style="font-size: 1.5rem; color: white; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px;">ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยความสุข รักเธอนะ 💙</p>
+            <audio autoplay loop>
+                <source src="happy_birthday.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </div>
     
     <script>
@@ -52,8 +81,8 @@
             const now = new Date();
             const birthday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
             if (now >= birthday) {
-                document.getElementById("countdown").classList.add("hidden");
-                document.getElementById("birthdayMessage").classList.remove("hidden");
+                document.getElementById("countdownPage").classList.add("hidden");
+                document.getElementById("passwordPage").classList.remove("hidden");
             } else {
                 const diff = birthday - now;
                 const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -64,6 +93,52 @@
             }
         }
         updateCountdown();
+
+        function checkPassword() {
+            const password = "102050"; // รหัสผ่านที่กำหนด
+            const input = document.getElementById("passwordInput").value;
+            if (input === password) {
+                document.getElementById("passwordPage").classList.add("hidden");
+                document.getElementById("contentPage").classList.remove("hidden");
+                document.getElementById("birthdayMessage").classList.remove("hidden");
+                startFireworks();
+                createBalloons();
+            } else {
+                document.getElementById("errorMessage").style.display = "block";
+            }
+        }
+
+        function startFireworks() {
+            const canvas = document.querySelector(".fireworks");
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            function drawFirework(x, y, color) {
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        ctx.arc(x + Math.random() * 200 - 100, y + Math.random() * 200 - 100, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }, i * 10);
+                }
+            }
+            setInterval(() => {
+                drawFirework(Math.random() * canvas.width, Math.random() * canvas.height, `hsl(${Math.random() * 360}, 100%, 50%)`);
+            }, 500);
+        }
+
+        function createBalloons() {
+            for (let i = 0; i < 20; i++) {
+                let balloon = document.createElement("div");
+                balloon.className = "balloon";
+                balloon.style.left = Math.random() * 100 + "vw";
+                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                document.body.appendChild(balloon);
+                setTimeout(() => balloon.remove(), 5000);
+            }
+            setTimeout(createBalloons, 2000);
+        }
     </script>
 </body>
 </html>
