@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        body {
+            background-color: #ADD8E6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+        }
+        #message {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-top: 20px;
+        }
+        #countdown {
+            font-size: 2rem;
+            color: #fff;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown"></div>
+    <div id="birthdayMessage" class="hidden">
+        <h1>Happy Birthday My Love! 🎉</h1>
+        <p id="message">ขอให้วันนี้เป็นวันที่ดีและเต็มไปด้วยความสุข รักเธอนะ 💙</p>
+        
+        <audio autoplay loop>
+            <source src="happy_birthday.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    
+    <script>
+        function updateCountdown() {
+            const now = new Date();
+            const birthday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+            if (now >= birthday) {
+                document.getElementById("countdown").classList.add("hidden");
+                document.getElementById("birthdayMessage").classList.remove("hidden");
+            } else {
+                const diff = birthday - now;
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+                document.getElementById("countdown").innerText = `Countdown: ${hours}h ${minutes}m ${seconds}s`;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        updateCountdown();
+    </script>
+</body>
+</html>
