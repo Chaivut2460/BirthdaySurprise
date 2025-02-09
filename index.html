@@ -114,22 +114,6 @@
     </div>
     
     <script>
-        function updateCountdown() {
-            const now = new Date();
-            const birthday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-            if (now >= birthday) {
-                document.getElementById("countdownPage").classList.add("hidden");
-                document.getElementById("passwordPage").classList.remove("hidden");
-            } else {
-                const diff = birthday - now;
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((diff / (1000 * 60)) % 60);
-                const seconds = Math.floor((diff / 1000) % 60);
-                document.getElementById("countdown").innerText = `Countdown: ${hours}h ${minutes}m ${seconds}s`;
-                setTimeout(updateCountdown, 1000);
-            }
-        }
-        updateCountdown();
 
         function checkPassword() {
             const password = "102050"; // รหัสผ่านที่กำหนด
